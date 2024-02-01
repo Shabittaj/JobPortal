@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js";
 
 export const authGetController = async (req, res) => {
     const user = await userModel.find();
-    res.json({ details: user });
+    res.status(200).json({ details: user });
 }
 
 export const emailGetController = async (req, res) => {
@@ -11,7 +11,7 @@ export const emailGetController = async (req, res) => {
         if (!data) {
             return res.status(401).json({ status: false, error: "User not found!" });
         }
-        res.json({
+        res.status(200).json({
             status: true,
             message: "Email found",
             data: data

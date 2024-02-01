@@ -27,11 +27,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "India"
     },
-    // role: {
-    //     type: String,
-    //     enum: ['jobSeeker', 'employer', 'admin'],
-    //     required: [true, 'Role is required']
-    // }
+    role: {
+        type: String,
+        enum: ['jobSeeker', 'employer', 'admin'],
+        required: [true, 'Role is required']
+    }
 }
     , {
         timestamps: true
