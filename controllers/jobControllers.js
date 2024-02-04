@@ -7,9 +7,11 @@ export const createJobController = async (req, res, next) => {
         if (!company || !position) {
             return next('please provide all the require field');
         }
-        req.body.createdBy = req.user.userId;
-        const job = await jobModel.create(req.body);
-        res.status(201).json({ job });
+        if (req.body.role === 'employer') {
+            req.body.createdBy = req.user.userId;
+            const job = await jobModel.create(req.body);
+            res.status(201).json({ job });
+        }
     } catch (error) {
         return next(error);
     }

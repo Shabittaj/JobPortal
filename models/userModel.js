@@ -46,7 +46,7 @@ userSchema.pre('save', async function () {
 
 //Creating JWT
 userSchema.methods.createJWT = function () {
-    return JWT.sign({ userId: this._id, firstName: this.firstName, email: this.email }, process.env.JWT_SECRET_KEY);
+    return JWT.sign({ userId: this._id, firstName: this.firstName, email: this.email, role: this.role }, process.env.JWT_SECRET_KEY);
 }
 
 userSchema.methods.comparePassword = function (userPassword) {

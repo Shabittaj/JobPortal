@@ -13,7 +13,7 @@ export const userAuth = (req, res, next) => {
         const payload = JWT.verify(token, process.env.JWT_SECRET_KEY);
         req.user = {
             firstName: payload.firstName,
-            // role: payload.role,
+            role: payload.role,
             email: payload.email,
             userId: payload.userId
         };
