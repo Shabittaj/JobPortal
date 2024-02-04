@@ -33,3 +33,26 @@ export const createEmployerDetails = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getEmployerDetails = async (req, res, next) => {
+    try {
+        if (req.user.role === 'employer') {
+            // Assuming you want to retrieve details based on the user ID
+            const userId = req.user.userId;
+
+            // Find the employer details for the given user ID
+            const employerDetails = await employerModel.findOne({ userId });
+
+            if (employerDetails) {
+                // Send a success response with the retrieved employer details
+                res.status(200).json(employerDetails);
+            } else {
+                res.status(404).json({ message: 'Employer details not found' });
+            }
+        } else {
+            res.status(403).json({ message: 'You are not authorized' });
+        }
+    } catch (error) {
+        next(error);
+    }
+}
