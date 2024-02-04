@@ -10,6 +10,7 @@ import testRoutes from './routes/testRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
+import employerRoutes from './routes/employerRoutes.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 //config
@@ -32,6 +33,7 @@ app.use('/app/v1/test', testRoutes);
 app.use('/app/v1/auth', authRoutes);
 app.use('/app/v1/user', userRoutes);
 app.use('/app/v1/job', jobRoutes);
+app.use('/app/v1/employer', employerRoutes);
 
 //Validation middleware
 app.use(errorMiddleware)
