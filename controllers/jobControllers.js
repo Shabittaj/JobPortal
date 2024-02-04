@@ -7,10 +7,12 @@ export const createJobController = async (req, res, next) => {
         if (!company || !position) {
             return next('please provide all the require field');
         }
-        if (req.body.role === 'employer') {
+        if (req.user.role === 'employer') {
             req.body.createdBy = req.user.userId;
             const job = await jobModel.create(req.body);
             res.status(201).json({ job });
+        } else {
+            return next('You are not authorized to create a Job!');
         }
     } catch (error) {
         return next(error);
