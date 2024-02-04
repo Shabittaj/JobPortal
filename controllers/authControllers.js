@@ -34,7 +34,8 @@ export const registerController = async (req, res, next) => {
             lastName: req.body.lastName,
             email: req.body.email,
             password: req.body.password,
-            // role: req.body.role
+            phoneNumber: req.body.phoneNumber,
+            role: req.body.role
         })
 
         // const user = await details.save()
@@ -51,7 +52,8 @@ export const registerController = async (req, res, next) => {
                 lastName: user.lastName,
                 email: user.email,
                 location: user.location,
-                // role: user.role
+                phoneNumber: user.phoneNumber,
+                role: user.role
 
             },
             // token: token

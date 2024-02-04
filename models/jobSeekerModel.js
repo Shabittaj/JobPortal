@@ -8,35 +8,19 @@ const jobSeekerSchema = new Schema({
         required: true,
         unique: true
     },
-    fullName: {
-        type: String,
-        required: true
-    },
-    skills: [{
-        type: String
-    }],
     education: {
         type: String
     },
-    experience: {
+    yearOfExperience: {
         type: String
     },
-    contactInfo: {
-        phone: {
-            type: String
-        }
-        // linkedInProfile: {
-        //     type: String
-        // },
-        // // Add more contact details as needed
-    },
-    resume: {
-        type: String, // You can store the file path or a link to the resume
+    resumeUrl: {
+        type: String,
     },
     portfolio: {
-        type: String, // Link to the job seeker's portfolio, if applicable
+        type: String,
     },
-    jobPreferences: {
+    jobPreferences: [{
         desiredJobTitle: {
             type: String
         },
@@ -46,7 +30,7 @@ const jobSeekerSchema = new Schema({
         desiredSalary: {
             type: Number
         },
-    },
+    }],
     workHistory: [{
         jobTitle: {
             type: String
@@ -74,7 +58,9 @@ const jobSeekerSchema = new Schema({
         technologiesUsed: [{
             type: String
         }],
-        // Add more project details as needed
+        projectUrl: {
+            type: String
+        },
     }],
     certifications: [{
         certificationName: {
@@ -86,7 +72,6 @@ const jobSeekerSchema = new Schema({
         issuanceDate: {
             type: Date
         },
-        // Add more certification details as needed
     }],
     skills: [{
         skillName: {
@@ -104,4 +89,3 @@ const jobSeekerSchema = new Schema({
 }, { timestamps: true });
 
 export default mongoose.model('JobSeeker', jobSeekerSchema);
-

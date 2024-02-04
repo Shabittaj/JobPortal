@@ -12,34 +12,10 @@ const employerSchema = new mongoose.Schema({
     companyDescription: {
         type: String
     },
-    numberOfEmployees: {
-        type: Number
-    },
     companyWebsite: {
-        type: String,
-        default: "none"
-    },
-    industry: {
         type: String
     },
-    address: {
-        street: {
-            type: String
-        },
-        city: {
-            type: String
-        },
-        state: {
-            type: String
-        },
-        postalCode: {
-            type: String
-        },
-        country: {
-            type: String
-        }
-    },
-    contactInfo: {
+    industry: {
         type: String
     },
 }, {
