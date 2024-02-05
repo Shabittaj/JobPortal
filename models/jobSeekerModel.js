@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const jobSeekerSchema = new Schema({
@@ -14,8 +14,11 @@ const jobSeekerSchema = new Schema({
     yearOfExperience: {
         type: String
     },
-    resumeUrl: {
-        type: String,
+    resume: {
+        // type: String,
+        data: Buffer, // Store binary data
+        contentType: String,
+        filename: String
     },
     portfolio: {
         type: String,

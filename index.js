@@ -11,6 +11,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
+import jobseekerRoutes from './routes/jobSeekerRoutes.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 //config
@@ -34,6 +35,7 @@ app.use('/app/v1/auth', authRoutes);
 app.use('/app/v1/user', userRoutes);
 app.use('/app/v1/job', jobRoutes);
 app.use('/app/v1/employer', employerRoutes);
+app.use('/app/v1/jobSeeker', jobseekerRoutes);
 
 //Validation middleware
 app.use(errorMiddleware)
