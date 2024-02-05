@@ -1,5 +1,6 @@
 import express from 'express';
-import { authGetController, emailGetController, loginPostController, registerController } from '../controllers/authControllers.js';
+import { authGetController, emailGetController, idGetController, loginPostController, registerController } from '../controllers/authControllers.js';
+import { userAuth } from '../middlewares/authMiddleware.js';
 
 const router = express.Router()
 
@@ -7,8 +8,11 @@ const router = express.Router()
 //routes
 router.get('/', authGetController);
 
-//EMAIL || GET 
-router.get('/:email', emailGetController);
+//GET WITH EMAIL || GET 
+router.get('/details', userAuth, emailGetController);
+
+//GET WITH ID || GET 
+router.get('/id-details', userAuth, idGetController);
 
 //REGISTER || POST
 router.post('/register', registerController);

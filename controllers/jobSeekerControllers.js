@@ -1,5 +1,4 @@
 import jobSeekerModel from '../models/jobSeekerModel.js';
-import JobSeekerModel from '../models/jobSeekerModel.js';
 
 
 export const createJobSeekerDetails = async (req, res, next) => {
