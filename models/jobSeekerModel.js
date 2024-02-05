@@ -15,10 +15,18 @@ const jobSeekerSchema = new Schema({
         type: String
     },
     resume: {
-        // type: String,
-        data: Buffer, // Store binary data
-        contentType: String,
-        filename: String
+        data: Buffer,
+        contentType: {
+            type: String,
+            validate: {
+                validator: function (value) {
+                    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/rtf', 'application/msword', 'text/rtf', 'application/doc', 'application/docx'];
+                    return allowedTypes.includes(value);
+                },
+                message: 'Invalid file type for resume. Only PDF, text, and Word documents are allowed.',
+            },
+        },
+        filename: String,
     },
     portfolio: {
         type: String,
