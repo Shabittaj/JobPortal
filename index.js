@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import connectDB from './config/db.js';
 import testRoutes from './routes/testRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import userRoutes from './routes/userRoutes.js';
+import userRoutes from './routes/profileRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobseekerRoutes from './routes/jobSeekerRoutes.js';
@@ -32,7 +32,7 @@ app.use(morgan('dev'));
 //routes
 app.use('/app/v1/test', testRoutes);
 app.use('/app/v1/auth', authRoutes);
-app.use('/app/v1/user', userRoutes);
+app.use('/app/v1/profile', userRoutes);
 app.use('/app/v1/job', jobRoutes);
 app.use('/app/v1/employer', employerRoutes);
 app.use('/app/v1/jobSeeker', jobseekerRoutes);

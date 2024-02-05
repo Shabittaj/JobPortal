@@ -16,7 +16,11 @@ export const createEmployerDetails = async (req, res, next) => {
             const savedEmployer = await newEmployer.save();
             // const savedEmployer = await employerModel.create(req.body);
 
-            res.status(201).json(savedEmployer);
+            res.status(201).json({
+                message: 'Details registered successfully',
+                status: true,
+                savedEmployer
+            });
         } else {
             next('You are not authorized');
         }

@@ -2,48 +2,16 @@ import employerModel from "../models/employerModel.js";
 import jobSeekerModel from "../models/jobSeekerModel.js";
 import userModel from "../models/userModel.js";
 
+//GET ALL THE DETAILS 
 export const authGetController = async (req, res) => {
     const user = await userModel.find();
     res.status(200).json({ details: user });
 }
 
-//DISPLAY PROFILE OF USER AND THEIR ROLE THROUGH ID
-export const idGetController = async (req, res, next) => {
-    try {
-        const id = req.user.userId;
-        const data = await userModel.findById({ _id: id });
-        if (!data) {
-            return res.status(401).json({ status: false, error: "User not found!" });
-        }
-        let details;
-        const employerData = await employerModel.findOne({ userId: data._id });
-        const jobSeekerData = await jobSeekerModel.findOne({ userId: data._id });
-        if (employerData) {
-            details = employerData;
-        } else {
-            details = jobSeekerData;
-        }
-        res.status(200).json({
-            status: true,
-            message: "Email found",
-            data: data, details
-        })
-
-
-    } catch (error) {
-        return res.status(400).json({
-            message: 'Error in Email Get Controller',
-            status: false,
-            error: error
-        })
-    }
-}
-
 //DISPLAY PROFILE OF USER AND THEIR ROLE THROUGH EMAIL 
 export const emailGetController = async (req, res) => {
     try {
-        const email = req.user.email;
-        const data = await userModel.findOne({ email: email });
+        const data = await userModel.findOne({ email: req.params.email });
         if (!data) {
             return res.status(401).json({ status: false, error: "User not found!" });
         } else {
