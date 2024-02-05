@@ -1,5 +1,5 @@
 import multer from 'multer';
-// import path from 'path';
+import path from 'path';
 
 // Multer configuration for handling file uploads to disk
 const storage = multer.diskStorage({
@@ -11,6 +11,11 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 2 * 1024 * 1024, // 2MB file size limit
+    },
+});
 
 export default upload;

@@ -20,6 +20,10 @@ export const userAuth = (req, res, next) => {
         next();
     } catch (error) {
         console.error(error);  // Log the error for debugging purposes
+        if (error.name === 'TokenExpiredError') {
+            // Token has expired
+            return next('Token has expired. Please log in again.');
+        }
         next('Auth Failed');
     }
 };

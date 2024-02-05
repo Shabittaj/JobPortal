@@ -1,3 +1,4 @@
+import jobSeekerModel from '../models/jobSeekerModel.js';
 import JobSeekerModel from '../models/jobSeekerModel.js';
 
 
@@ -55,3 +56,22 @@ export const createJobSeekerDetails = async (req, res, next) => {
     }
 }
 
+
+export const getJobSeekerDetails = async (req, res, next) => {
+    try {
+        if (req.user.role === 'jobSeeker') {
+            const userId = req.user.userId;
+            const jobSeekerDetails = await jobSeekerModel.findOne({ userId });
+
+            if (jobSeekerDetails) {
+                res.status(200).json(jobSeekerDetails);
+            } else {
+                res.status(404).json({ message: 'jobSeeker details not found' });
+            }
+        } else {
+            res.status(403).json({ message: 'You are not authorized' });
+        }
+    } catch (error) {
+        next(error);
+    }
+}
