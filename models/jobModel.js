@@ -22,7 +22,6 @@ const jobSchema = new mongoose.Schema({
     },
     jobLocation: {
         type: String,
-        default: 'India',
         required: [true, 'Job Location is require']
     },
     createdBy: {

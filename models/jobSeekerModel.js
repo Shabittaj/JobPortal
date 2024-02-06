@@ -99,4 +99,12 @@ const jobSeekerSchema = new Schema({
     },
 }, { timestamps: true });
 
+jobSeekerSchema.pre('save', async function () {
+    try {
+        if (!this.isModified) return;
+    } catch (error) {
+        next(error);
+    }
+})
+
 export default mongoose.model('JobSeeker', jobSeekerSchema);

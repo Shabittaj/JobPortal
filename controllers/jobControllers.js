@@ -3,14 +3,16 @@ import jobModel from "../models/jobModel.js";
 // ******CREATE JOB*******
 export const createJobController = async (req, res, next) => {
     try {
-        const { company, position } = req.body;
-        if (!company || !position) {
-            return next('please provide all the require field');
-        }
-        if (req.user.role === 'employer') {
+        const role = req.user.role;
+        if (role === 'employer') {
+            const { title, jobLocation } = req.body;
+            if (!title || !jobLocation) {
+                return next('please provide all the require field');
+            }
             req.body.createdBy = req.user.userId;
             const job = await jobModel.create(req.body);
             res.status(201).json({ job });
+
         } else {
             return next('You are not authorized to create a Job!');
         }
@@ -38,26 +40,29 @@ export const getAllJobController = async (req, res, next) => {
 export const updateJobController = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { company, position } = req.body;
-        if (!company || !position) {
-            return next("Please fill out all fields");
-        }
+        const updates = req.body;
+
         const job = await jobModel.findOne({ _id: id });
         if (!job) {
-            return next(`No Job with the id of ${id}`);
+            return res.status(404).json({ error: `No Job with the id of ${id}` });
         }
         if (!(req.user.userId === job.createdBy.toString())) {
-            return next('you are not authorized to update this job')
+            return res.status(403).json({ error: 'You are not authorized to update this job' });
         }
-        const updateJob = await jobModel.findOneAndUpdate({ _id: id }, req.body, {
-            new: true,
-            runValdator: true
-        })
+
+        // Update only the fields that are present in the request body
+        for (const key in updates) {
+            if (Object.prototype.hasOwnProperty.call(updates, key)) {
+                job[key] = updates[key];
+            }
+        }
+
+        const updateJob = await job.save();
+
         res.status(200).json({
             status: true,
             updateJob
-        })
-
+        });
 
     } catch (error) {
         return next(error);

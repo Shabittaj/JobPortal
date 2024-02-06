@@ -64,22 +64,27 @@ export const emailGetController = async (req, res) => {
 
 //UPDATE USER PROFILE 
 export const updateUserController = async (req, res, next) => {
-    const { firstName, lastName, email, location } = req.body;
-    if (!firstName || !lastName || !email || !location) {
-        return next('please provide all the field');
-    }
+    const { firstName, lastName, email, phoneNumber, address } = req.body;
     try {
-        // const user = await userModel.findOne({ email });
-        // console.log(req.user._id);
         const userId = req.user.userId;
         const user = await userModel.findById({ _id: userId });
         if (!user) {
             return next('User Not Found');
         }
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.email = email;
-        user.location = location;
+        const updateField = req.body;
+
+        // if (updateField.firstName) user.firstName = firstName;
+        // if (updateField.lastName) user.lastName = lastName;
+        // if (updateField.email) user.email = email;
+        // if (updateField.phoneNumber) user.phoneNumber = phoneNumber;
+        // if (updateField.address) user.address = address;
+
+        // Update only the fields that are present in the request body
+        for (const key in updateField) {
+            if (Object.prototype.hasOwnProperty.call(updateField, key)) {
+                user[key] = updateField[key];
+            }
+        }
 
         await user.save();
 
@@ -98,5 +103,71 @@ export const updateUserController = async (req, res, next) => {
 
 //UPDATE DETAILS OF EMPLOYER/JOBSEEKER BASED ON USER ID
 export const updateDetailsControllers = async (req, res, next) => {
+    try {
+        const id = req.user.userId;
+        const data = await userModel.findById({ _id: id });
+        if (!data) {
+            return res.status(401).json({ status: false, error: "User not found!" });
+        }
 
-}
+        let updatedDetails;  // Declare it once before the if statements
+
+        const employerData = await employerModel.findOne({ userId: data._id });
+        const jobSeekerData = await jobSeekerModel.findOne({ userId: data._id });
+
+        if (employerData) {
+            const updateFields = req.body;
+
+            // Update only the fields that are present in the request body
+            for (const key in updateFields) {
+                if (Object.prototype.hasOwnProperty.call(updateField, key)) {
+                    employerData[key] = updateFields[key];
+                }
+            }
+
+            // Save the updated document
+            updatedDetails = await employerData.save();
+        }
+
+        if (jobSeekerData) {
+
+            const updateFields = req.body;
+
+            // if (updateFields.education) jobSeekerData.education = updateFields.education;
+            // if (updateFields.yearOfExperience) jobSeekerData.yearOfExperience = updateFields.yearOfExperience;
+            // if (updateFields.resume) jobSeekerData.resume = updateFields.resume;
+            // if (updateFields.portfolio) jobSeekerData.portfolio = updateFields.portfolio;
+            // if (updateFields.jobPreferences) jobSeekerData.jobPreferences = updateFields.jobPreferences;
+            // if (updateFields.workHistory) jobSeekerData.workHistory = updateFields.workHistory;
+            // if (updateFields.projects) jobSeekerData.projects = updateFields.projects;
+            // if (updateFields.certifications) jobSeekerData.certifications = updateFields.certifications;
+            // if (updateFields.skills) jobSeekerData.skills = updateFields.skills;
+            // if (updateFields.additionalInformation) jobSeekerData.additionalInformation = updateFields.additionalInformation;
+
+            // Update only the fields that are present in the request body
+            for (const key in updateFields) {
+                if (Object.prototype.hasOwnProperty.call(updateFields, key)) {
+                    jobSeekerData[key] = updateFields[key];
+                }
+            }
+
+            // Save the updated document
+            updatedDetails = await jobSeekerData.save();
+        }
+
+        res.status(200).json({
+            status: true,
+            message: "Details Updated",
+            data: data,
+
+            updatedDetails: updatedDetails
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            message: 'Error in updating details',
+            status: false,
+            error: error
+        });
+    }
+};

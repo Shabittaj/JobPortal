@@ -11,9 +11,9 @@ router.get('/email-details', userAuth, emailGetController);
 router.get('/details', userAuth, idGetController);
 
 //UPDATE USER DETAILS || PUT 
-router.put('/update-user', userAuth, updateUserController)
+router.patch('/update-user', userAuth, updateUserController)
 
 //UPDATE EMPLOYER/JOBSEEKER DETAILS || PUT 
-router.put('/update-details', userAuth, updateDetailsControllers)
+router.patch('/update-details', userAuth, updateDetailsControllers)
 
 export default router;

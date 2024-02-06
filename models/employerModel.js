@@ -22,4 +22,12 @@ const employerSchema = new mongoose.Schema({
     timestamps: true
 })
 
+employerSchema.pre('save', async function () {
+    try {
+        if (!this.isModified) return;
+    } catch (error) {
+        next(error);
+    }
+})
+
 export default mongoose.model('Employer', employerSchema)
