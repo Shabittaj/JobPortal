@@ -19,7 +19,7 @@ export const createJobSeekerDetails = async (req, res, next) => {
             } = req.body;
 
             // Create a new job seeker object
-            const newJobSeeker = new JobSeekerModel({
+            const newJobSeeker = new jobSeekerModel({
                 userId: req.user.userId,
                 education,
                 yearOfExperience,
