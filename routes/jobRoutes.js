@@ -1,6 +1,6 @@
 import express from 'express';
 import { userAuth } from '../middlewares/authMiddleware.js';
-import { createJobController, deleteJobController, getAllJobController, updateJobController } from '../controllers/jobControllers.js';
+import { createJobController, deleteJobController, getAllJobCreatedByEmployerController, updateJobController, viewAllJobsController } from '../controllers/jobControllers.js';
 import { applyJobController } from '../controllers/applicationControllers.js';
 
 const router = express.Router()
@@ -10,8 +10,11 @@ const router = express.Router()
 //CREATE JOB || POST
 router.post('/create-job', userAuth, createJobController);
 
-//VIEW JOB || GET
-router.get('/get-job', userAuth, getAllJobController);
+//VIEW JOB FOR EMPLOYER TO SEE THEIR CREATED JOBS ONLY || GET
+router.get('/get-job', userAuth, getAllJobCreatedByEmployerController);
+
+//VIEW ALL JOBS FOR JOBSEEKER || GET
+router.get('/view-all-jobs', /*userAuth,*/ viewAllJobsController);
 
 //UPDATE JOB || PATCH
 router.patch('/update-job/:id', userAuth, updateJobController);

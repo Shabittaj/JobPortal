@@ -21,8 +21,8 @@ export const createJobController = async (req, res, next) => {
     }
 }
 
-// ******GET JOB*******
-export const getAllJobController = async (req, res, next) => {
+// ******GET JOB FOR EMPLOYER TO SEE THEIR CREATED JOBS ONLY*******
+export const getAllJobCreatedByEmployerController = async (req, res, next) => {
     try {
         const jobs = await jobModel.find({ createdBy: req.user.userId });
         res.status(200).json({
@@ -35,6 +35,67 @@ export const getAllJobController = async (req, res, next) => {
     }
 
 }
+
+
+//  *********GET JOBS FOR JOBSEEKER TO VIEW *************
+export const viewAllJobsController = async (req, res, next) => {
+    try {
+
+        const { status, jobType, search, sort } = req.query;
+        //conditons for searching filters
+        let queryObject = {};
+
+        //logic filters
+        if (status && status !== "all") {
+            queryObject.status = status;
+        }
+        if (jobType && jobType !== "all") {
+            queryObject.jobType = jobType;
+        }
+        if (search) {
+            queryObject.title = { $regex: search, $options: "i" };
+        }
+
+        let queryResult = jobModel.find(queryObject);
+
+        //sorting
+        if (sort === "latest") {
+            queryResult = queryResult.sort("-createdAt");
+        }
+        if (sort === "oldest") {
+            queryResult = queryResult.sort("createdAt");
+        }
+        if (sort === "a-z") {
+            queryResult = queryResult.sort("title");
+        }
+        if (sort === "z-a") {
+            queryResult = queryResult.sort("-title");
+        }
+        //pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        queryResult = queryResult.skip(skip).limit(limit);
+        //jobs count
+        const totalJobs = await jobModel.countDocuments(queryResult);
+        const numOfPage = Math.ceil(totalJobs / limit);
+
+        const jobs = await queryResult;
+
+        // const jobs = await jobsModel.find({ createdBy: req.user.userId });
+        res.status(200).json({
+            totalJobs,
+            jobs,
+            numOfPage,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+
+}
+
 
 // ******UPDATE JOB*******
 export const updateJobController = async (req, res, next) => {

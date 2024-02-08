@@ -4,6 +4,7 @@ import jobModel from '../models/jobModel.js';
 
 export const applyJobController = async (req, res, next) => {
     try {
+        // const { jobId } = req.query;
         const { jobId } = req.body;
         const jobSeekerId = req.user.userId;
         const jobseekerRole = req.user.role;
@@ -50,6 +51,7 @@ export const applyJobController = async (req, res, next) => {
 
 export const getAppliedData = async (req, res, next) => {
     try {
+        // const { jobId } = req.query;
         const { jobId } = req.body;
         const employerId = req.user.userId;
         const applications = await applicationModel.find({ jobId })
