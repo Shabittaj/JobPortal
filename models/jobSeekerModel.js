@@ -27,6 +27,7 @@ const jobSeekerSchema = new Schema({
             },
         },
         filename: String,
+        src: String
     },
     portfolio: {
         type: String,

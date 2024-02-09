@@ -38,7 +38,8 @@ export const createJobSeekerDetails = async (req, res, next) => {
                 newJobSeeker.resume = {
                     data: req.file.buffer, // Update this line to read from the file on disk
                     contentType: req.file.mimetype,
-                    filename: req.file.originalname
+                    filename: req.file.originalname,
+                    src: "http://" + req.hostname + ":8080" + "/static/" + req.file.path
                 };
             }
 
