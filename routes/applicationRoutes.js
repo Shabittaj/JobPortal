@@ -9,7 +9,7 @@ router.post('/apply-job', userAuth, applyJobController);
 
 
 //AGET APPLIED JOB || GET 
-router.get('/applied-job', userAuth, getAppliedData);
+router.get('/applied-job/:jobId', userAuth, getAppliedData);
 
 
 export default router;

@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 const employerSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     },
     companyName: {
         type: String,

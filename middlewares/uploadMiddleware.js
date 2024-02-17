@@ -11,11 +11,25 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({
+export const upload = multer({
     storage: storage,
     limits: {
         fileSize: 2 * 1024 * 1024, // 2MB file size limit
     },
 });
 
-export default upload;
+const logoStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'assets/'); // Set the destination folder
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+export const logoUpload = multer({
+    storage: logoStorage,
+    limits: {
+        fileSize: 2 * 1024 * 1024, // 2MB file size limit
+    },
+});

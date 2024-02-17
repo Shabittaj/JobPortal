@@ -1,17 +1,41 @@
 import jobModel from "../models/jobModel.js";
+import employerModel from "../models/employerModel.js";
 
 // ******CREATE JOB*******
 export const createJobController = async (req, res, next) => {
     try {
         const role = req.user.role;
         if (role === 'employer') {
-            const { title, jobLocation } = req.body;
+            const { title, jobLocation, description, preferredEducation, preferredSkill, jobType, status, industry, preferredExperience, salary } = req.body;
             if (!title || !jobLocation) {
                 return next('please provide all the require field');
             }
-            req.body.createdBy = req.user.userId;
-            const job = await jobModel.create(req.body);
-            res.status(201).json({ job });
+            const newJob = new jobModel({
+                title,
+                jobLocation,
+                description,
+                preferredEducation,
+                preferredSkill,
+                jobType,
+                status,
+                industry,
+                preferredExperience,
+                salary,
+                createdBy: req.user.userId
+            });
+
+            if (req.file) {
+                // Assuming you have a field in your schema to store the resume
+                newJob.companyLogoUrl = {
+                    data: req.file.buffer, // Update this line to read from the file on disk
+                    contentType: req.file.mimetype,
+                    filename: req.file.originalname,
+                    src: "http://" + req.hostname + ":8080" + "/static/" + req.file.path
+                };
+            }
+            // const job = await jobModel.create(req.body);
+            const details = await newJob.save();
+            res.status(201).json({ details });
 
         } else {
             return next('You are not authorized to create a Job!');
@@ -86,14 +110,38 @@ export const viewAllJobsController = async (req, res, next) => {
         // const jobs = await jobsModel.find({ createdBy: req.user.userId });
         res.status(200).json({
             totalJobs,
-            jobs,
             numOfPage,
+            jobs,
         });
 
     } catch (error) {
         next(error);
     }
 
+}
+
+
+//  *********VIEW PARTICULAR JOB************
+export const viewJobController = async (req, res, next) => {
+    try {
+        const jobId = req.params.id;
+        const job = await jobModel.findById(jobId);
+        if (!job) {
+            next('job is not available');
+        }
+        console.log('job.createdBy: ', job.createdBy);
+        const details = await employerModel.find({ userId: job.createdBy })
+            .populate('userId', 'firstName lastName role -password')
+            .select(['companyName', 'companyDescription', 'companyWebsite'])
+            .exec();
+        res.status(200).json({
+            job,
+            details
+        })
+
+    } catch (error) {
+        next(error);
+    }
 }
 
 

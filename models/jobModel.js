@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 
 const jobSchema = new mongoose.Schema({
+    companyLogoUrl: {
+        data: Buffer,
+        contentType: {
+            type: String,
+        },
+        filename: String,
+        src: String
+    },
     title: {
         type: String,
         required: [true, 'Job title is require'],
@@ -31,22 +39,32 @@ const jobSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['active', 'inactive'],
-        default: 'inactive'
+        default: 'active'
     },
-    // category: {
-    //     type: String,
-    //     enum: ['IT', 'HR', 'Education', 'BPO', 'others']
-    // },
-    // salary: {
-    //     min: {
-    //         type: Number,
-    //         default: 0
-    //     },
-    //     max: {
-    //         type: Number,
-    //         default: 0
-    //     }
-    // }
+    industry: {
+        type: String,
+        default: 'others'
+    },
+    preferredExperience: {
+        min: {
+            type: Number,
+            default: 0
+        },
+        max: {
+            type: Number,
+            default: 0
+        }
+    },
+    salary: {
+        min: {
+            type: Number,
+            default: 0
+        },
+        max: {
+            type: Number,
+            default: 0
+        }
+    }
 
 }, { timestamps: true });
 

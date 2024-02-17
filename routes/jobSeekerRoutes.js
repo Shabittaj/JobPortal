@@ -1,7 +1,7 @@
 import express from 'express';
 import { userAuth } from '../middlewares/authMiddleware.js';
 import { createJobSeekerDetails, getJobSeekerDetails } from '../controllers/jobSeekerControllers.js';
-import upload from '../middlewares/uploadMiddleware.js';
+import { upload } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
