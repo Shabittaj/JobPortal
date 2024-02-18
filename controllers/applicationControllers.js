@@ -8,8 +8,9 @@ import path from 'path';
 
 export const applyJobController = async (req, res, next) => {
     try {
-        // const { jobId } = req.query;
-        const { jobId } = req.body;
+        const jobId = req.params.id;
+        console.log(jobId);
+        // const { jobId } = req.body;
         const jobSeekerId = req.user.userId;
         const jobseekerRole = req.user.role;
         if (jobseekerRole === 'jobSeeker') {
@@ -55,7 +56,7 @@ export const applyJobController = async (req, res, next) => {
 
 export const getAppliedData = async (req, res, next) => {
     try {
-        const jobId = req.params.jobId;
+        const jobId = req.params.id;
         const applications = await applicationModel.find({ jobId });
 
         // Extract jobSeekerIds from applications
