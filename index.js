@@ -37,7 +37,7 @@ app.use('/app/v1/profile', userRoutes);
 app.use('/app/v1/job', jobRoutes);
 app.use('/app/v1/employer', employerRoutes);
 app.use('/app/v1/jobSeeker', jobseekerRoutes);
-app.use('/app/v1/application', applicationRoutes);
+// app.use('/app/v1/application', applicationRoutes);
 
 //Validation middleware
 app.use(errorMiddleware)
