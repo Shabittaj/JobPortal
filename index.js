@@ -12,7 +12,7 @@ import userRoutes from './routes/profileRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobseekerRoutes from './routes/jobSeekerRoutes.js';
-import applicationRoutes from './routes/applicationRoutes.js';
+// import applicationRoutes from './routes/applicationRoutes.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 //config

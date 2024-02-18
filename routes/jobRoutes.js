@@ -19,7 +19,7 @@ router.get('/view-all-jobs', userAuth, viewAllJobsController);
 
 
 //VIEW PARTICULAR JOBS FOR JOBSEEKER || GET
-router.get('/view-job/:id', userAuth, viewJobController);
+router.get('/:id', userAuth, viewJobController);
 
 
 //APPLY JOB || POST 
