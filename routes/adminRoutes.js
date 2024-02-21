@@ -1,6 +1,6 @@
 import express from 'express';
 import { userAuth } from '../middlewares/authMiddleware.js';
-import { dashboard } from '../controllers/adminControllers.js';
+import { dashboard, registerAdmin } from '../controllers/adminControllers.js';
 const router = express.Router()
 
 
@@ -8,8 +8,8 @@ const router = express.Router()
 router.get('/dashboard', userAuth, dashboard);
 
 
-//AGET APPLIED JOB || GET 
-// router.get('/applied-job/:jobId', userAuth, getAppliedData);
+//CREATE ADMIN || POST 
+router.post('/register', userAuth, registerAdmin);
 
 
 export default router;

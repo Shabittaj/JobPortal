@@ -21,3 +21,27 @@ export const dashboard = async (req, res, next) => {
     }
 }
 
+export const registerAdmin = async (req, res, next) => {
+    try {
+        if (req.user.role === 'admin') {
+            const user = await userModel.create(req.body);
+
+            res.status(201).json({
+                message: 'User registered successfully',
+                status: true,
+                user: {
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    location: user.location,
+                    phoneNumber: user.phoneNumber,
+                    role: user.role
+                }
+            })
+        } else {
+            next('only admin have the access to this route');
+        }
+    } catch (error) {
+        next(error);
+    }
+}
