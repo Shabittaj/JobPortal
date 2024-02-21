@@ -5,7 +5,7 @@ import employerModel from "../models/employerModel.js";
 export const createJobController = async (req, res, next) => {
     try {
         const role = req.user.role;
-        if (role === 'employer') {
+        if (role === 'employer' || role === 'admin') {
             const { title, jobLocation, description, preferredEducation, preferredSkill, jobType, status, industry, preferredExperience, salary } = req.body;
             if (!title || !jobLocation) {
                 return next('please provide all the require field');

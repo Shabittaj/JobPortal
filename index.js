@@ -12,7 +12,7 @@ import userRoutes from './routes/profileRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
 import employerRoutes from './routes/employerRoutes.js';
 import jobseekerRoutes from './routes/jobSeekerRoutes.js';
-// import applicationRoutes from './routes/applicationRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { errorMiddleware } from './middlewares/errorMiddleware.js';
 
 //config
@@ -37,7 +37,7 @@ app.use('/app/v1/profile', userRoutes);
 app.use('/app/v1/job', jobRoutes);
 app.use('/app/v1/employer', employerRoutes);
 app.use('/app/v1/jobSeeker', jobseekerRoutes);
-// app.use('/app/v1/application', applicationRoutes);
+app.use('/app/v1/admin', adminRoutes);
 
 //Validation middleware
 app.use(errorMiddleware)
