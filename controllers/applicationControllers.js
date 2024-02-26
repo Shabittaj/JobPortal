@@ -86,6 +86,38 @@ export const getAppliedData = async (req, res, next) => {
     }
 }
 
+
+export const getAppliedJobSeekerData = async (req, res, next) => {
+    try {
+        const jobId = req.params.id;
+        const jobSeekerId = req.params.jobSeekerId;
+        const applications = await applicationModel.find({ jobId, jobSeekerId });
+        if (!applications) {
+            return next('no details found..');
+        }
+
+        // console.log('ids', jobSeekerIds);
+
+        let details = [];
+
+        const jobSeekerDetails = await jobSeekerModel.findOne({ userId: jobSeekerId })
+            .populate('userId', 'firstName lastName -password')
+            .select(['education', 'resume', 'workHistory']).exec();
+
+        // console.log('jobSeekerDetails', jobSeekerDetails); // Log jobSeekerDetails
+
+        // Push job seeker details into the details array
+        details.push(jobSeekerDetails);
+
+
+        // Send response with applications and job seeker details
+        res.status(200).json({ applications, details });
+    } catch (error) {
+        console.error('Error fetching job seeker details:', error);
+        next(error);
+    }
+}
+
 // export const testgetAppliedData = async (req, res, next) => {
 //     try {
 //         // const { jobId } = req.query;

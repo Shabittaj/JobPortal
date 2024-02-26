@@ -1,7 +1,7 @@
 import express from 'express';
 import { userAuth } from '../middlewares/authMiddleware.js';
 import { createJobController, deleteJobController, getAllJobCreatedByEmployerController, updateJobController, viewAllJobsController, viewJobController } from '../controllers/jobControllers.js';
-import { applyJobController, getAppliedData } from '../controllers/applicationControllers.js';
+import { applyJobController, getAppliedData, getAppliedJobSeekerData } from '../controllers/applicationControllers.js';
 import { logoUpload } from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router()
@@ -26,9 +26,11 @@ router.get('/:id', userAuth, viewJobController);
 router.post('/:id/apply-job', userAuth, applyJobController);
 
 
-//AGET APPLIED JOB || GET 
+//GET APPLIED JOB || GET 
 router.get('/:id/applications', userAuth, getAppliedData);
 
+//GET SPECIFIC APPLIED JOBSEEKER DETIALJOB || GET 
+router.get('/:id/applications/:jobSeekerId', userAuth, getAppliedJobSeekerData);
 
 //UPDATE JOB || PATCH
 router.patch('/update-job/:id', userAuth, updateJobController);

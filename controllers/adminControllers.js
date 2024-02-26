@@ -11,8 +11,9 @@ export const dashboard = async (req, res, next) => {
             const totalJobs = await jobModel.countDocuments();
             const totalEmployers = await employerModel.countDocuments();
             const totalJobSeekers = await jobSeekerModel.countDocuments();
+            const totalResumes = await jobSeekerModel.countDocuments({ resume: { $ne: null } }); // Count documents where resume is not null
             const totalApplications = await applicationModel.countDocuments();
-            res.status(200).json({ totalAdmins, totalJobs, totalEmployers, totalJobSeekers, totalApplications });
+            res.status(200).json({ totalAdmins, totalJobs, totalEmployers, totalJobSeekers, totalResumes, totalApplications });
         } else {
             next('only admin have the access to this route');
         }
@@ -20,6 +21,7 @@ export const dashboard = async (req, res, next) => {
         next(error)
     }
 }
+
 
 export const registerAdmin = async (req, res, next) => {
     try {
