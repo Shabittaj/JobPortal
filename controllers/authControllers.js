@@ -36,68 +36,125 @@ export const emailGetController = async (req, res) => {
 
 export const registerController = async (req, res, next) => {
     try {
-        const details = new userModel({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password,
-            phoneNumber: req.body.phoneNumber,
-            role: req.body.role
-        })
+        const { firstName, lastName, email, password, phoneNumber, role } = req.body;
 
-        // const user = await details.save()
-        const user = await userModel.create(req.body);
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Email already exists', status: false });
+        }
 
-        //token
-        const token = user.createJWT();
+        const newUser = new userModel({
+            firstName,
+            lastName,
+            email,
+            password,
+            phoneNumber,
+            role
+        });
+
+        // Generate OTP for email verification
+        newUser.generateVerificationOTP();
+
+        // Send email with verification OTP
+        await newUser.sendVerificationEmail();
+
+        // Save user details with email verification OTP
+        await newUser.save();
+
+        const token = newUser.createJWT();
 
         res.status(201).json({
-            message: 'User registered successfully',
+            message: 'User registered successfully. Verification OTP sent to email.',
             status: true,
             user: {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                location: user.location,
-                phoneNumber: user.phoneNumber,
-                role: user.role
-
-            },
-            token: token
-        })
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                phoneNumber: newUser.phoneNumber,
+                role: newUser.role
+            }, token
+        });
 
     } catch (error) {
         next(error);
     }
-}
+};
+
+
+// Endpoint to handle OTP verification
+export const verifyEmailController = async (req, res, next) => {
+    try {
+        const email = req.user.email;
+        const { otp } = req.body;
+
+        // Find the user by email
+        const user = await userModel.findOne({ email });
+
+        // Check if user exists
+        if (!user) {
+            return res.status(404).json({ message: 'User not found', status: false });
+        }
+
+        user.isEmailVerified = await user.verifyEmailOTP(otp);
+
+        // Verify the OTP
+        if (user.isEmailVerified) {
+            // Mark the email as verified
+            try {
+                // user.isEmailVerified = true;
+                await user.save();
+                const token = user.createJWT();
+                return res.status(200).json({ message: 'Email verified successfully', status: true, token });
+            } catch (error) {
+                return next(error);
+            }
+        } else {
+            console.log(user.isEmailVerified);
+            return res.status(400).json({ message: 'Invalid OTP or OTP expired', status: false });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 export const loginPostController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            next('Please Provide require fields');
+            return res.status(400).json({ message: 'Please provide required fields', status: false });
         }
 
         const user = await userModel.findOne({ email }).select("+password");
         if (!user) {
-            next('Invalid email or password');
+            return res.status(401).json({ message: 'Invalid email or password', status: false });
         }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return next('Invalid email or password');
+            return res.status(401).json({ message: 'Invalid email or password', status: false });
+        }
+
+        const token = user.createJWT();
+
+        // Check if user is verified
+        if (!user.isEmailVerified) {
+            // Send OTP again for email verification
+            user.generateVerificationOTP();
+            await user.sendVerificationEmail();
+            await user.save();
+            // return res.status(401).json({ message: 'Email is not verified. OTP sent again for verification', status: false });
         }
 
         user.password = undefined;
-        const token = user.createJWT();
-        res.status(201).json({
-            message: 'User login successfully',
+        res.status(200).json({
+            message: 'User login successful',
             status: true,
             user,
-            token: token
-        })
+            token
+        });
 
     } catch (error) {
         next(error);
     }
-}
+};
